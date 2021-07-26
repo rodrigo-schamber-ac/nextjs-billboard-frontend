@@ -1,61 +1,17 @@
-import express from 'express';
-import request from 'request';
-import cors from 'cors';
+import { NextApiRequest, NextApiResponse } from 'next';
 import querystring from 'querystring';
-import cookieParser from 'cookie-parser';
+import request from 'request';
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = process.env.REDIRECT_URL;
-
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-
-const generateRandomString = function (length) {
-  let text = '';
-  const possible =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (let i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-};
+const redirect_uri = process.env.REDIRECT_URI;
 
 const stateKey = 'spotify_auth_state';
 
-const app = express();
-
-app
-  .use(express.static(__dirname + '/public'))
-  .use(cors())
-  .use(cookieParser());
-
-app.get('/login', function (req, res) {
-  const state = generateRandomString(16);
-  res.cookie(stateKey, state);
-
-  // your application requests authorization
-  const scope = 'user-read-private user-read-email';
-  res.redirect(
-    'https://accounts.spotify.com/authorize?' +
-      querystring.stringify({
-        response_type: 'code',
-        client_id: client_id,
-        scope: scope,
-        redirect_uri: redirect_uri,
-        state: state
-      })
-  );
-});
-
-app.get('/callback', function (req, res) {
-  // your application requests refresh and access tokens
-  // after checking the state parameter
-
+export default function handleCallback(
+  req: NextApiRequest,
+  res: NextApiResponse
+): void {
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -68,7 +24,8 @@ app.get('/callback', function (req, res) {
         })
     );
   } else {
-    res.clearCookie(stateKey);
+
+    //res.clearCookie(stateKey);
     const authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       form: {
@@ -83,7 +40,6 @@ app.get('/callback', function (req, res) {
       },
       json: true
     };
-
     request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
         const access_token = body.access_token,
@@ -118,4 +74,4 @@ app.get('/callback', function (req, res) {
       }
     });
   }
-});
+};
