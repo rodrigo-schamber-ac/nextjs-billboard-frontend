@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import Cookies from 'js-cookie';
 import querystring from 'querystring';
 import request from 'request';
 
@@ -25,7 +26,7 @@ export default function handleCallback(
     );
   } else {
 
-    //res.clearCookie(stateKey);
+    Cookies.remove(stateKey);
     const authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       form: {

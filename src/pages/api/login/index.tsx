@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import Cookies from 'js-cookie';
 import querystring from 'querystring';
 
 const client_id = process.env.CLIENT_ID;
@@ -20,13 +21,14 @@ const generateRandomString = function (length) {
   }
   return text;
 };
+const stateKey = 'spotify_auth_state';
 
 export default function handleLogin(
   req: NextApiRequest,
   res: NextApiResponse
 ): void {
   const state = generateRandomString(16);
-  //res.cookie(stateKey, state);
+  Cookies.set(stateKey, state);
   const scope = 'user-read-private user-read-email';
   res.redirect(
     'https://accounts.spotify.com/authorize?' +
