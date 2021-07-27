@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Cookies from 'js-cookie';
+import { setCookie } from '../../../middleware/cookies';
 import querystring from 'querystring';
 
 const client_id = process.env.CLIENT_ID;
-const redirect_uri = process.env.REDIRECT_URI;
+const redirect_uri = process.env.REDIRECT_URI_NOSAFE;
 
 /**
  * Generates a random string containing numbers and letters
@@ -28,8 +28,9 @@ export default function handleLogin(
   res: NextApiResponse
 ): void {
   const state = generateRandomString(16);
-  Cookies.set(stateKey, state);
   const scope = 'user-read-private user-read-email';
+  setCookie(res, stateKey, state);
+  
   res.redirect(
     'https://accounts.spotify.com/authorize?' +
       querystring.stringify({
@@ -40,4 +41,5 @@ export default function handleLogin(
         state: state
       })
   );
+  //res.end(res.getHeader('Set-Cookie'));
 };

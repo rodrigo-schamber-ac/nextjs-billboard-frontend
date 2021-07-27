@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Cookies from 'js-cookie';
 import querystring from 'querystring';
 import request from 'request';
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = process.env.REDIRECT_URI;
+const redirect_uri = process.env.REDIRECT_URI_NOSAFE;
 
 const stateKey = 'spotify_auth_state';
 
@@ -16,7 +15,6 @@ export default function handleCallback(
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
-
   if (state === null || state !== storedState) {
     res.redirect(
       '/#' +
@@ -26,7 +24,7 @@ export default function handleCallback(
     );
   } else {
 
-    Cookies.remove(stateKey);
+    //Cookies.remove(stateKey);
     const authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       form: {
@@ -44,7 +42,7 @@ export default function handleCallback(
     request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
         const access_token = body.access_token,
-          refresh_token = body.refresh_token;
+        refresh_token = body.refresh_token;
 
         const options = {
           url: 'https://api.spotify.com/v1/me',
@@ -59,13 +57,14 @@ export default function handleCallback(
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
-          '/#' +
+          'home/#' +
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token
             })
         );
       } else {
+        //console.log(body)
         res.redirect(
           '/#' +
             querystring.stringify({
