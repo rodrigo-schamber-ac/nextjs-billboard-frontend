@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { setCookie } from '../../../middleware/cookies';
+import { setCookie } from '../../../utils/cookies';
 import querystring from 'querystring';
 
 const client_id = process.env.CLIENT_ID;
-const redirect_uri = process.env.REDIRECT_URI_NOSAFE;
+const redirect_uri = process.env.REDIRECT_URI;
 
 /**
  * Generates a random string containing numbers and letters
@@ -11,7 +11,7 @@ const redirect_uri = process.env.REDIRECT_URI_NOSAFE;
  * @return {string} The generated string
  */
 
-const generateRandomString = function (length) {
+const generateRandomString = function (length: number): string {
   let text = '';
   const possible =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -41,5 +41,4 @@ export default function handleLogin(
         state: state
       })
   );
-  //res.end(res.getHeader('Set-Cookie'));
 };

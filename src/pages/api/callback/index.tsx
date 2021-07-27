@@ -4,7 +4,7 @@ import request from 'request';
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = process.env.REDIRECT_URI_NOSAFE;
+const redirect_uri = process.env.REDIRECT_URI;
 
 const stateKey = 'spotify_auth_state';
 
@@ -39,10 +39,10 @@ export default function handleCallback(
       },
       json: true
     };
-    request.post(authOptions, function (error, response, body) {
+    request.post(authOptions, (error, response, body): void => {
       if (!error && response.statusCode === 200) {
-        const access_token = body.access_token,
-        refresh_token = body.refresh_token;
+        const access_token = body.access_token;
+        const refresh_token = body.refresh_token;
 
         const options = {
           url: 'https://api.spotify.com/v1/me',
@@ -64,7 +64,6 @@ export default function handleCallback(
             })
         );
       } else {
-        //console.log(body)
         res.redirect(
           '/#' +
             querystring.stringify({
