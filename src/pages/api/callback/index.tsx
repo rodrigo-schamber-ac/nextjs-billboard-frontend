@@ -51,7 +51,7 @@ export default function handleCallback(
         };
 
         // use the access token to access the Spotify Web API
-        request.get(options, function (error, response, body) {
+        request.get(options, (error, response, body): void => {
           console.log(body);
         });
 
