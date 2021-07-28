@@ -8,7 +8,7 @@ const redirect_uri = process.env.REDIRECT_URI;
 
 const stateKey = 'spotify_auth_state';
 
-export default function handleCallback(
+export default function callback(
   req: NextApiRequest,
   res: NextApiResponse
 ): void {

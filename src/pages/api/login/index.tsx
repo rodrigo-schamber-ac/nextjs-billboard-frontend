@@ -23,7 +23,7 @@ const generateRandomString = function (length: number): string {
 };
 const stateKey = 'spotify_auth_state';
 
-export default function handleLogin(
+export default function login(
   req: NextApiRequest,
   res: NextApiResponse
 ): void {

@@ -1,14 +1,22 @@
 import { FC } from 'react';
+import Link from 'next/link';
 import 'tailwindcss/tailwind.css';
 
 const Home: FC = () => {
   return (
-    <div>
+    <div className="container">
       <div id="login">
-        <h1>First, log in to spotify</h1>
-        <a href="api/login">Log in</a>
+        <Link href="/api/login">
+          <a className="btn btn-primary">Log in with Spotify</a>
+        </Link>
       </div>
-      <div id="loggedin"></div>
+      <div id="loggedin">
+        <div id="user-profile"></div>
+        <div id="oauth"></div>
+        <button className="btn btn-default" id="obtain-new-token">
+          New token
+        </button>
+      </div>
     </div>
   );
 };

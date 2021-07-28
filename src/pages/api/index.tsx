@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default function handleApi(
+export default function api(
   req: NextApiRequest,
   res: NextApiResponse
 ): void {
