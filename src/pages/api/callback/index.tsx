@@ -61,7 +61,7 @@ export default function callback(
             });
 
           res.redirect(
-            'home/#' +
+            'home/' +
               querystring.stringify({
                 access_token: access_token,
                 refresh_token: refresh_token
