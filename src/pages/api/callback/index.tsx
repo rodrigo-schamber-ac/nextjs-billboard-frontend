@@ -44,7 +44,6 @@ export default function callback(
       .post('https://accounts.spotify.com/api/token', params, config)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response?.data);
           const access_token = response?.data?.access_token;
           const refresh_token = response?.data?.refresh_token;
           const options = {
@@ -54,19 +53,16 @@ export default function callback(
           axios
             .get('https://api.spotify.com/v1/me', options)
             .then((response) => {
-              console.log(response?.data);
+              console.log("access token: ", access_token);
+              console.log("refresh token: ", refresh_token);
+              res.redirect(
+                'home/' +
+                  response?.data?.id
+              );
             })
             .catch((error) => {
               console.log(error);
             });
-
-          res.redirect(
-            'home/' +
-              querystring.stringify({
-                access_token: access_token,
-                refresh_token: refresh_token
-              })
-          );
         } else {
           res.redirect(
             '/#' +
