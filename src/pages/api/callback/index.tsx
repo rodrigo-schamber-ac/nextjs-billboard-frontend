@@ -24,7 +24,6 @@ export default function callback(
         })
     );
   } else {
-    //Cookies.remove(stateKey);
     const params = new URLSearchParams();
 
     params.append('code', `${code}`);
@@ -53,12 +52,9 @@ export default function callback(
           axios
             .get('https://api.spotify.com/v1/me', options)
             .then((response) => {
-              console.log("access token: ", access_token);
-              console.log("refresh token: ", refresh_token);
-              res.redirect(
-                'home/' +
-                  response?.data?.id
-              );
+              console.log('access token: ', access_token);
+              console.log('refresh token: ', refresh_token);
+              res.redirect('home/' + response?.data?.id);
             })
             .catch((error) => {
               console.log(error);
